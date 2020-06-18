@@ -4,6 +4,15 @@
 ### Be sure to read this first. https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/README.md
 ###
 
+### Crear usuario admin-user
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+
+---
+### Relacionar el admin-user con la service account kubernetes-dashboard (creada en proy dashboard)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
