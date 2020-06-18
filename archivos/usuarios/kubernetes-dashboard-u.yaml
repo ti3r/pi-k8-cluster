@@ -19,7 +19,7 @@ metadata:
   namespace: kubernetes-dashboard
 rules:
 - apiGroups: [""]
-  resources: ["*"]
+  resources: ["services", "endpoints", "pods", "persistentvolumeclaims", "configmaps", "secrets", "statefulsets", "replicationcontrollers", "ingresses", "daemonsets", "replicasets", "deployments"]
   verbs: ["get", "list", "watch"]
 ---
 ### Relacionar el admin-user con la service account kubernetes-dashboard (creada en proy dashb)
