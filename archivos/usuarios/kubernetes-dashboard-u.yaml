@@ -12,7 +12,7 @@ metadata:
   namespace: kubernetes-dashboard
 
 ---
-### Relacionar el admin-user con la service account kubernetes-dashboard (creada en proy dashboard)
+### Relacionar el admin-user con la service account kubernetes-dashboard (creada en proy dashb)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -24,5 +24,5 @@ roleRef:
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: kubernetes-dashboard
+    name: admin-user
     namespace: kubernetes-dashboard
