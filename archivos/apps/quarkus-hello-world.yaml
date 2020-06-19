@@ -1,0 +1,68 @@
+###
+### Crear un namespace especial para la aplicacion
+###
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quarkus-hello-world
+
+---
+###
+### Despliega la aplicacion simple de hello world desarrollada con quarkus framework
+###
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quarkus-hello-world-deployment
+  labels:
+    app: quarkus-hello-world
+  namespace: quarkus-hello-world
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello-world
+        image: albiworks/quarkus-hello-world:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+
+---
+###
+### Crear un servicio para enlazar el deployment de hello world al puerto 30007 de un nodo
+###
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: quarkus-hello-world
+  name: quarkus-hello-world-service
+  namespace: quarkus-hello-world
+spec:
+  type: NodePort
+  selector:
+    app: hello-world
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30007

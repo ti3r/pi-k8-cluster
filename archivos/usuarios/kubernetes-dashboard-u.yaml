@@ -3,6 +3,8 @@
 ### proyecto con anterioridad. https://github.com/kubernetes/dashboard.
 ### Be sure to read this first. https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/README.md
 ###
+### Once executed you can get the login token using:  
+### kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 
 ### Crear usuario admin-user
 apiVersion: v1
