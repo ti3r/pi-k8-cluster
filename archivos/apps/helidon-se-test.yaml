@@ -1,0 +1,68 @@
+###
+### Crear un namespace especial para la aplicacion
+###
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: helidon-tests
+
+---
+###
+### Despliega la aplicacion simple de hello world desarrollada con quarkus framework
+###
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helidon-se-tests-deployment
+  labels:
+    app: helidon-se-tests
+  namespace: helidon-tests
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: helidon-se-tests
+  template:
+    metadata:
+      labels:
+        app: helidon-se-tests
+    spec:
+      containers:
+      - name: helidon-se-tests
+        image: albiworks/helidon-se-tests:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+
+---
+###
+### Crear un servicio para enlazar el deployment de hello world al puerto 30007 de un nodo
+###
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: helidon-se-tests
+  name: helidon-se-tests-service
+  namespace: helidon-tests
+spec:
+  type: ClusterIP
+  selector:
+    app: hello-world
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
